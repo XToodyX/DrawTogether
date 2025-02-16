@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DRAW TOGETHER</title>
+  <link rel="icon" href="https://fav.farm/%E2%9C%8F%EF%B8%8F" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>
+    DRAW TOGETHER
+    <img src="https://fav.farm/%E2%9C%8D%EF%B8%8F" alt="Icon" style="width: 1em; height: 1em; vertical-align: middle;">
+  </h1>
+  
+  <div id="drawground">
+    <canvas id="draw" width="800" height="800"></canvas>
+    <div class="color-buttons">
+      <button class="green" onclick="ctx.strokeStyle = 'green'"></button>
+      <button class="yellow" onclick="ctx.strokeStyle = 'yellow'"></button>
+      <button class="black" onclick="ctx.strokeStyle = 'black'"></button>
+      <button class="pink" onclick="ctx.strokeStyle = 'pink'"></button>
+      <button class="orange" onclick="ctx.strokeStyle = 'orange'"></button>
+      <button class="blue" onclick="ctx.strokeStyle = 'blue'"></button>
+      <button class="red" onclick="ctx.strokeStyle = 'red'"></button>
+      <button class="purple" onclick="ctx.strokeStyle = 'purple'"></button>
+      <button class="brown" onclick="ctx.strokeStyle = 'brown'"></button>
+      <button class="gray" onclick="ctx.strokeStyle = 'gray'"></button>
+      <button id="clearCanvas" onclick="ctx.clearRect(0, 0, canvasElement.width, canvasElement.height)">
+        <img src="clear-icon.svg">
+      </button>
+    </div>  
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
