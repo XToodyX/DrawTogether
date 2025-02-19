@@ -35,10 +35,10 @@ io.on('connection', function(socket) {
         }
     })
 
-    socket.on('drawing', (path) => {
+    socket.on('drawing', (drawingData) => {
         console.log(`${socket.id} is drawing`);
         // Broadcast the drawing path to other clients
-        socket.broadcast.emit('drawing', path);
+        socket.broadcast.emit('drawing', drawingData);
     });
 
     socket.on('disconnect', () => {
