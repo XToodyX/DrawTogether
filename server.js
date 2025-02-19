@@ -41,6 +41,12 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('drawing', drawingData);
     });
 
+    socket.on('clearCanvas', () => {
+        console.log(`${socket.id} cleared canvas`);
+        // Broadcast clearing canvas to other clients
+        socket.broadcast.emit('clearCanvas');
+    })
+
     socket.on('disconnect', () => {
         console.log("Player disconnected with Socket ID: " + socket.id);
         delete players[socket.id];

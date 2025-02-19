@@ -22,6 +22,11 @@ function draw(e) {
   drawingPath.push({ x: e.offsetX, y: e.offsetY});
 }
 
+function notifyClearCanvas() {
+  clearCanvas();
+  socket.emit('clearCanvas');
+}
+
 function clearCanvas() {
   ctx.clearRect(0, 0, canvasElement.width, canvasElement.height)
 }
@@ -66,9 +71,13 @@ socket.on('drawing', ({path, color}) => {
     ctx.lineTo(path[i].x, path[i].y);
   }
   ctx.stroke();
-  
+
   ctx.strokeStyle = previousDrawColor
 });
+
+socket.on('clearCanvas', () => {
+  clearCanvas();
+})
 
 // Handle disconnection
 window.addEventListener('beforeunload', () => {
