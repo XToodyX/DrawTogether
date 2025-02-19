@@ -77,3 +77,8 @@
     justify-content: center;
     align-items: center;
   }
+
+  button.selected {
+    border: 2px solid aqua;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  }

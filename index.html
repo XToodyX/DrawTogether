@@ -15,22 +15,21 @@
   <div id="drawground">
     <canvas id="draw" width="800" height="800"></canvas>
     <div class="color-buttons">
-      <button class="green" onclick="ctx.strokeStyle = 'green'"></button>
-      <button class="yellow" onclick="ctx.strokeStyle = 'yellow'"></button>
-      <button class="black" onclick="ctx.strokeStyle = 'black'"></button>
-      <button class="pink" onclick="ctx.strokeStyle = 'pink'"></button>
-      <button class="orange" onclick="ctx.strokeStyle = 'orange'"></button>
-      <button class="blue" onclick="ctx.strokeStyle = 'blue'"></button>
-      <button class="red" onclick="ctx.strokeStyle = 'red'"></button>
-      <button class="purple" onclick="ctx.strokeStyle = 'purple'"></button>
-      <button class="brown" onclick="ctx.strokeStyle = 'brown'"></button>
-      <button class="gray" onclick="ctx.strokeStyle = 'gray'"></button>
-      <button id="clearCanvas" onclick="ctx.clearRect(0, 0, canvasElement.width, canvasElement.height)">
-        <img src="clear-icon.svg">
+      <button class="green" onclick="setColor('green', this)"></button>
+      <button class="yellow" onclick="setColor('yellow', this)"></button>
+      <button class="black" onclick="setColor('black', this)"></button>
+      <button class="pink" onclick="setColor('pink', this)"></button>
+      <button class="orange" onclick="setColor('orange', this)"></button>
+      <button class="blue" onclick="setColor('blue', this)"></button>
+      <button class="red" onclick="setColor('red', this)"></button>
+      <button class="purple" onclick="setColor('purple', this)"></button>
+      <button class="brown" onclick="setColor('brown', this)"></button>
+      <button class="gray" onclick="setColor('gray', this)"></button>
+      <button id="clearCanvas" onclick="clearCanvas()">
+        <img src="assets/clear-icon.svg">
       </button>
     </div>  
   </div>
-  
   <script src="script.js"></script>
 </body>
 </html>
