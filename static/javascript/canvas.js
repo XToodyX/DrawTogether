@@ -11,6 +11,48 @@ let lastX = 0;
 let lastY = 0;
 let drawingPath = [];
 
+// --- Connecting with PeerJS ---
+var peer = new Peer();
+
+peer.on('open', function(id) {
+  const peerConnectionIdContainer = document.createElement('div');
+  peerConnectionIdContainer.id = 'peerConnectionIdContainer';
+
+  const peerIdParagraph = document.createElement('p');
+  peerIdParagraph.textContent = `Your Peer-ID: ${id}`;
+  peerConnectionIdContainer.appendChild(peerIdParagraph);
+
+  const copyPeerIdButton = document.createElement('button');
+  copyPeerIdButton.id = 'copyPeerIdButton';
+  copyPeerIdButton.onclick = () => copyPeerId(id);
+  const copyIcon = document.createElement('img');
+  copyIcon.src = 'assets/content-copy.svg';
+  copyPeerIdButton.appendChild(copyIcon);
+
+  peerConnectionIdContainer.appendChild(copyPeerIdButton);
+  document.body.appendChild(peerConnectionIdContainer);
+
+  console.log('My peer ID is: ' + id);
+});
+
+peer.on('connection', function(conn) {
+  console.log('CONNECTION FROM OTHER RECEIVED');
+  
+  conn.on('data', (data) => {
+    if (data.type === 'drawing') {
+      drawFromData(data.path, data.color);
+    } else if (data.type === 'clearCanvas') {
+      clearCanvas();
+    }
+  });
+});
+
+function copyPeerId(id) {
+  navigator.clipboard.writeText(id).then().catch(err => {
+    console.error('Failed to copy peer ID: ', err);
+  })
+}
+
 function draw(e) {
   if (!isDrawing) return;
 
@@ -19,16 +61,16 @@ function draw(e) {
   ctx.lineTo(e.offsetX, e.offsetY);
   ctx.stroke();
   [lastX, lastY] = [e.offsetX, e.offsetY];
-  drawingPath.push({ x: e.offsetX, y: e.offsetY});
+  drawingPath.push({ x: e.offsetX, y: e.offsetY });
 }
 
 function notifyClearCanvas() {
   clearCanvas();
-  socket.emit('clearCanvas');
+  sendToPeers({ type: 'clearCanvas' });
 }
 
 function clearCanvas() {
-  ctx.clearRect(0, 0, canvasElement.width, canvasElement.height)
+  ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 }
 
 function setColor(color, selectedButton) {
@@ -37,9 +79,27 @@ function setColor(color, selectedButton) {
   const previousSelectedButton = document.querySelector('.color-buttons .selected');
 
   if (previousSelectedButton) {
-    previousSelectedButton.classList.remove('selected')
+    previousSelectedButton.classList.remove('selected');
   }
-  selectedButton.classList.add('selected');  
+  selectedButton.classList.add('selected');
+}
+
+function joinRoom() {
+  let room = document.getElementById('joinRoomInput').value;
+  
+  if (room) {
+    const conn = peer.connect(room);
+    conn.on('open', () => {
+      console.log('Connected to: ' + room);
+      conn.on('data', (data) => {
+        if (data.type === 'drawing') {
+          drawFromData(data.path, data.color);
+        } else if (data.type === 'clearCanvas') {
+          clearCanvas();
+        }
+      });
+    });
+  }
 }
 
 canvasElement.addEventListener('mousedown', (e) => {
@@ -50,18 +110,14 @@ canvasElement.addEventListener('mousedown', (e) => {
 
 canvasElement.addEventListener('mouseup', () => {
   isDrawing = false;
-  socket.emit('drawing', {path: drawingPath, color: ctx.strokeStyle});
+  const data = { type: 'drawing', path: drawingPath, color: ctx.strokeStyle };
+  sendToPeers(data);
 });
+
 canvasElement.addEventListener('mouseout', () => isDrawing = false);
 canvasElement.addEventListener('mousemove', draw);
 
-// --- Socket logic ---
-var socket = io();
-
-socket.emit('new player');
-
-// Handle incoming drawing data from others
-socket.on('drawing', ({path, color}) => {
+function drawFromData(path, color) {
   let previousDrawColor = ctx.strokeStyle;
   ctx.strokeStyle = color;
 
@@ -72,16 +128,17 @@ socket.on('drawing', ({path, color}) => {
   }
   ctx.stroke();
 
-  ctx.strokeStyle = previousDrawColor
-});
+  ctx.strokeStyle = previousDrawColor;
+}
 
-socket.on('clearCanvas', () => {
-  clearCanvas();
-})
+function sendToPeers(data) {
+  Object.values(peer.connections).forEach(conns => {
+    conns.forEach(conn => {
+      conn.send(data);
+    });
+  });
+}
 
-// Handle disconnection
 window.addEventListener('beforeunload', () => {
-  socket.emit('disconnect');
-});
-
-
+  peer.destroy()
+})

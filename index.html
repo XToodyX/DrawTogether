@@ -6,12 +6,18 @@
   <link rel="icon" href="https://fav.farm/%E2%9C%8F%EF%B8%8F" />
   <link rel="stylesheet" href="static/css/styles.css">
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
 <body>
   <h1>
     DRAW TOGETHER
     <img src="https://fav.farm/%E2%9C%8D%EF%B8%8F" alt="Icon" style="width: 1em; height: 1em; vertical-align: middle;">
   </h1>
+
+  <div class="gameRoomInput">
+    <input id="joinRoomInput" type="text" id="roomInput" placeholder="Enter room ID or name">
+    <button id="joinRoomButton" onclick="joinRoom()" type="button">Join Room</button>
+  </div>
   
   <div id="drawground">
     <canvas id="draw" width="800" height="800"></canvas>

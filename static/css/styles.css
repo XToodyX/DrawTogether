@@ -26,7 +26,7 @@
     margin-left: 10px;
   }
 
-  button {
+  .color-buttons button {
     width: 1.5rem;
     height: 1.5rem;
     margin-bottom: 5px;
@@ -81,4 +81,32 @@
   button.selected {
     border: 2px solid aqua;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  }
+
+  .gameRoomInput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+
+  #joinRoomButton {
+    padding: .2rem;
+  }
+
+  #joinRoomInput {
+    padding: .2rem;
+  }
+
+  #peerConnectionIdContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  #copyPeerIdButton {
+    padding: .2rem;
   }
